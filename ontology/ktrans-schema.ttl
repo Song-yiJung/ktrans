@@ -1,0 +1,295 @@
+@prefix ktrans: <https://ktrans.aks.ac.kr/ontology#> .
+@prefix kt:     <https://ktrans.aks.ac.kr/id/> .
+@prefix lrmoo:  <http://iflastandards.info/ns/lrm/lrmoo/> .
+@prefix crm:    <http://www.cidoc-crm.org/cidoc-crm/7.1.3/> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+
+#################################################################
+# ktrans 온톨로지 스키마 v3.1
+#
+# 설계 원칙: LRMoo·CIDOC CRM 표준을 최대한 그대로 쓴다.
+#            자체 정의는 클래스 1개 + 프로퍼티 3개뿐이다.
+# Design principle: reuse LRMoo and CIDOC CRM as they are; one class and three properties of our own.
+#
+# 메모 규칙: 모든 노드의 설명은 crm:P3_has_note 하나에 담는다. 한국어(@ko)와 영어(@en)를 함께 둔다.
+# Note convention: one crm:P3_has_note per node, in Korean and English.
+#            문장 앞에 꼬리표를 붙인다. Each sentence starts with a tag.
+#            (설명) description — 자료에 적힌 사실 · (해석) interpretation — 누군가의 판단(이름을 함께 쓴다)
+#            (편찬) compilation — 데이터를 만든 사람의 판단 · (근거) evidence — 문단 번호나 문헌
+#
+# 네임스페이스는 시안용 임시다. 정식 공개 시 w3id.org 로 옮긴다.
+# The namespace is provisional and will move to w3id.org on formal release.
+#################################################################
+
+<https://ktrans.aks.ac.kr/ontology>
+    a owl:Ontology ;
+    rdfs:label "ktrans — 한국어 번역·수용사 온톨로지"@ko ,
+               "ktrans — An Ontology for Korean Literary Translation and Reception"@en ;
+    dct:description "괴테 『젊은 베르터의 고뇌』 한국어 번역서지와 번역비평을 질의 가능한 데이터로 구조화하기 위한 온톨로지. LRMoo를 골격으로, CIDOC CRM E13을 비평 진술의 참조 표준으로, MiMoText의 LOD 문학사 모델을 설계 원리로 삼는다."@ko , "An ontology that structures the Korean translation bibliography and translation criticism of Goethe's Werther as queryable data. LRMoo is the backbone, CIDOC CRM E13 the reference standard for critical statements, and MiMoText's LOD model of literary history the design principle."@en ;
+    owl:imports <http://iflastandards.info/ns/lrm/lrmoo/> ,
+                <http://www.cidoc-crm.org/cidoc-crm/7.1.3/> ;
+    dct:source <http://www.uedeko.or.kr/wiki2/index.php?title=젊은_베르터의_고뇌_(Die_Leiden_des_jungen_Werthers)> ;
+    dct:creator "정송이 (Jung Song-yi), 한국학중앙연구원 디지털인문학연구소"@ko , "Jung Song-yi, Digital Humanities Research Institute, Academy of Korean Studies"@en ;
+    skos:editorialNote "모든 노드의 설명은 crm:P3_has_note 하나에 담는다. 문장 앞에 꼬리표를 붙인다. (설명) 자료에 적힌 사실, (해석) 누군가의 판단으로 판단한 사람의 이름을 문장 안에 쓴다, (편찬) 데이터를 만든 사람의 판단, (근거) 문단 번호나 문헌."@ko , "Every node carries its context in one crm:P3_has_note, in Korean and English. Each sentence starts with a tag: (description) what the source says; (interpretation) someone's judgement, with the person named; (compilation) the compiler's decision; (evidence) a paragraph or reference."@en ;
+    owl:versionInfo "3.1 (2026-10)" .
+
+
+#################################################################
+# 1. 자체 정의 클래스 (1개)
+#################################################################
+
+ktrans:Translation
+    a owl:Class ;
+    rdfs:subClassOf lrmoo:F2_Expression ;
+    rdfs:label "번역본"@ko , "Translation"@en ;
+    rdfs:comment "번역 결과물. F2 Expression의 하위 클래스이며, 번역유형 두 축(sourceType·viaType)의 정의역이 되므로 유일하게 신설한다."@ko , "A translation. A subclass of F2 Expression; the only new class, defined because it is the domain of the two translation-type axes (sourceType, viaType)."@en .
+
+
+#################################################################
+# 2. 자체 정의 프로퍼티 (3개)
+#################################################################
+
+ktrans:sourceType
+    a owl:ObjectProperty ;
+    rdfs:domain ktrans:Translation ;
+    rdfs:range crm:E55_Type ;
+    rdfs:label "분량 유형"@ko , "source type (coverage axis)"@en ;
+    rdfs:comment "원작 중 얼마를 옮겼는가. UeDeKo 편찬자가 판정해 둔 값을 계승한다."@ko , "How much of the original was translated. Inherits the value assigned by the UeDeKo editors."@en .
+
+ktrans:viaType
+    a owl:ObjectProperty ;
+    rdfs:domain ktrans:Translation ;
+    rdfs:range crm:E55_Type ;
+    rdfs:label "경유 유형"@ko , "via type (route axis)"@en ;
+    rdfs:comment "무엇을 거쳐 옮겼는가. UeDeKo 원표의 '번역형태' 한 칸에 섞여 있던 정보를 분리해 복원한 축. 저본이 특정되는 경우 lrmoo:F28_Expression_Creation 의 crm:P16/P2 경로가 전체 경로이며, 이 속성은 그 축약이다."@ko , "What the translation went through. An axis recovered by separating information mixed in UeDeKo's single translation-type field. Where the source is identified, the full path is crm:P16/P2 on lrmoo:F28_Expression_Creation; this property is its shortcut."@en .
+
+ktrans:hasPolarity
+    a owl:DatatypeProperty ;
+    rdfs:domain crm:E13_Attribute_Assignment ;
+    rdfs:range xsd:string ;
+    rdfs:label "평가 극성"@ko , "polarity"@en ;
+    rdfs:comment "비평 진술의 평가 극성(+, -, 0). 분류표의 평가 항목에만 붙으며 관찰 항목에는 붙지 않는다. UeDeKo에 없던 값으로, 줄글 비평을 질의 가능하게 만들기 위해 새로 부여했다."@ko , "Polarity of a critical statement (+, -, 0). Used only with evaluative dimensions, never with observations. Not in UeDeKo; added so that the prose criticism can be queried."@en .
+
+
+#################################################################
+# 3. 통제어휘 — 번역유형 두 축
+#################################################################
+
+kt:scheme-sourceType a skos:ConceptScheme ;
+    rdfs:label "분량 축 (sourceType)"@ko , "coverage axis (sourceType)"@en ;
+    skos:scopeNote "UeDeKo 원표의 '저본 번역유형'·'작품 번역유형'에서 분량에 해당하는 값."@ko , "The coverage values from UeDeKo's 'source translation type' and 'work translation type' columns."@en .
+
+kt:scheme-viaType a skos:ConceptScheme ;
+    rdfs:label "경유 축 (viaType)"@ko , "route axis (viaType)"@en ;
+    skos:scopeNote "원표에 '중역'은 12건 기재되어 있으나 '직접'은 한 번도 기재되어 있지 않다. 나머지는 미기재이며 '직접'으로 간주하지 않는다."@ko , "UeDeKo marks 'relay' 12 times but never marks 'direct'. The rest are 'not stated' and are not treated as direct."@en .
+
+kt:cov-full      a crm:E55_Type ; skos:inScheme kt:scheme-sourceType ;
+    rdfs:label "완역"@ko , "complete translation"@en .
+kt:cov-partial   a crm:E55_Type ; skos:inScheme kt:scheme-sourceType ;
+    rdfs:label "편역"@ko , "partial translation"@en .
+kt:cov-adapted   a crm:E55_Type ; skos:inScheme kt:scheme-sourceType ;
+    rdfs:label "개작"@ko , "adaptation"@en .
+kt:cov-bilingual a crm:E55_Type ; skos:inScheme kt:scheme-sourceType ;
+    rdfs:label "대역본"@ko , "bilingual edition"@en ;
+    skos:scopeNote "엄밀히는 판형의 문제이나 해당 레코드가 적어 이번 판에서는 분량 축에 수용한다."@ko , "Strictly a matter of format, but kept on the coverage axis in this version because few records use it."@en .
+kt:cov-unknown   a crm:E55_Type ; skos:inScheme kt:scheme-sourceType ;
+    rdfs:label "확인불가"@ko , "unverifiable"@en ;
+    skos:scopeNote "결측이 아니라 명시적 값이다. 편찬자가 확인을 시도했으나 실물을 확인하지 못한 경우."@ko , "An explicit value, not a missing one: the editors tried but could not inspect the item."@en .
+
+kt:via-direct  a crm:E55_Type ; skos:inScheme kt:scheme-viaType ;
+    rdfs:label "직접"@ko , "direct translation"@en .
+kt:via-relay   a crm:E55_Type ; skos:inScheme kt:scheme-viaType ;
+    rdfs:label "중역"@ko , "relay translation"@en .
+kt:via-unknown a crm:E55_Type ; skos:inScheme kt:scheme-viaType ;
+    rdfs:label "확인불가"@ko , "unverifiable"@en .
+kt:via-unstated a crm:E55_Type ; skos:inScheme kt:scheme-viaType ;
+    rdfs:label "미기재"@ko , "not stated"@en ;
+    skos:scopeNote "원 데이터에 경유 정보가 적혀 있지 않은 경우. '직접'과 구별한다."@ko , "No route information in the source data. Kept distinct from 'direct'."@en .
+
+
+#################################################################
+# 4. 통제어휘 — 진술유형 / 사실유형
+#################################################################
+
+kt:scheme-statementType a skos:ConceptScheme ; rdfs:label "진술유형"@ko , "statement type"@en .
+
+kt:st-evaluation a crm:E55_Type ; skos:inScheme kt:scheme-statementType ;
+    rdfs:label "평가"@ko , "evaluation"@en ;
+    skos:scopeNote "번역의 질에 대한 판단. 극성이 붙는다."@ko , "A judgement on the quality of a translation. Carries a polarity."@en .
+kt:st-observation a crm:E55_Type ; skos:inScheme kt:scheme-statementType ;
+    rdfs:label "관찰"@ko , "observation"@en ;
+    skos:scopeNote "문체·표현을 있는 그대로 적은 것. 극성이 붙지 않는다."@ko , "A description of style or wording as it is. No polarity."@en .
+kt:st-fact a crm:E55_Type ; skos:inScheme kt:scheme-statementType ;
+    rdfs:label "사실"@ko , "factual statement"@en ;
+    skos:scopeNote "저본·출판경위·역자정보 등 사실 관계에 관한 진술."@ko , "A statement of fact: source text, publication history, translator and similar."@en .
+kt:st-rebuttal a crm:E55_Type ; skos:inScheme kt:scheme-statementType ;
+    rdfs:label "반론"@ko , "rebuttal"@en ;
+    skos:scopeNote "선행 견해에 대한 이의. 대상이 번역본이 아니라 다른 진술인 경우가 있다."@ko , "An objection to an earlier view. Its target may be another statement rather than a translation."@en .
+
+kt:scheme-factType a skos:ConceptScheme ; rdfs:label "사실유형"@ko , "fact type"@en .
+
+kt:ft-translator  a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "역자정보"@ko , "translator information"@en .
+kt:ft-source      a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "저본"@ko , "source text"@en ;
+    skos:scopeNote "lrmoo:F28_Expression_Creation 사건 노드를 세울 대상을 가려내는 근거가 된다."@ko , "The basis for deciding which translations get source information on their lrmoo:F28_Expression_Creation event."@en .
+kt:ft-publication a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "출판경위"@ko , "publication history"@en .
+kt:ft-scope       a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "번역범위"@ko , "scope of translation"@en .
+kt:ft-reception   a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "수용맥락"@ko , "reception context"@en .
+kt:ft-term        a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "번역어"@ko , "translated term"@en .
+kt:ft-biblio      a crm:E55_Type ; skos:inScheme kt:scheme-factType ; rdfs:label "서지"@ko , "bibliography"@en .
+
+
+#################################################################
+# 5. 통제어휘 — 분류표 10항목 (차원)
+#################################################################
+
+kt:scheme-dimension a skos:ConceptScheme ;
+    rdfs:label "번역비평 분류표 (10항목)"@ko , "translation criticism scheme (10 dimensions)"@en ;
+    skos:scopeNote "관찰 4항목(1~4)과 평가 6항목(5~10)으로 나뉜다. 평가 항목에만 극성이 붙는다."@ko , "Four observational dimensions (1–4) and six evaluative ones (5–10). Only evaluative dimensions carry a polarity."@en .
+
+kt:dim-sentence-ending a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "종결어미체"@ko , "sentence ending"@en ; ktrans:dimensionKind "관찰" .
+kt:dim-addressee-term a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "수신자 호칭"@ko , "addressee term"@en ; ktrans:dimensionKind "관찰" .
+kt:dim-lexical-register a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "어휘 색채"@ko , "lexical register"@en ; ktrans:dimensionKind "관찰" .
+kt:dim-proper-noun a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "고유명 처리"@ko , "proper noun handling"@en ; ktrans:dimensionKind "관찰" .
+kt:dim-naturalness a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "자연스러움·가독성"@ko , "naturalness"@en ; ktrans:dimensionKind "평가" .
+kt:dim-accuracy a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "정확성"@ko , "accuracy"@en ; ktrans:dimensionKind "평가" .
+kt:dim-fidelity a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "충실도"@ko , "fidelity"@en ; ktrans:dimensionKind "평가" .
+kt:dim-error-history a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "오역 이력"@ko , "error history"@en ; ktrans:dimensionKind "평가" .
+kt:dim-social-critique a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "사회비판 전달"@ko , "transfer of social critique"@en ; ktrans:dimensionKind "평가" .
+kt:dim-interpretive-frame a crm:E55_Type ; skos:inScheme kt:scheme-dimension ;
+    rdfs:label "해석 프레임"@ko , "interpretive frame"@en ; ktrans:dimensionKind "평가" .
+
+ktrans:dimensionKind
+    a owl:DatatypeProperty ;
+    rdfs:domain crm:E55_Type ;
+    rdfs:range xsd:string ;
+    rdfs:label "차원 구분"@ko , "dimension kind"@en ;
+    rdfs:comment "관찰 또는 평가. 편의용 보조 속성이며 질의에서 극성 필수 여부를 가린다."@ko , "Observation or evaluation. An auxiliary convenience property that tells queries whether a polarity is required."@en .
+
+
+#################################################################
+# 6. 통제어휘 — 분류표 각 항목의 값
+#################################################################
+
+# 1. 종결어미체
+kt:val-se-da     a crm:E55_Type ; skos:broader kt:dim-sentence-ending ; rdfs:label "-다"@ko , "-da (plain)"@en .
+kt:val-se-ne     a crm:E55_Type ; skos:broader kt:dim-sentence-ending ; rdfs:label "-네·-데"@ko , "-ne/-de (familiar)"@en .
+kt:val-se-o      a crm:E55_Type ; skos:broader kt:dim-sentence-ending ; rdfs:label "-오·-소"@ko , "-o/-so (semi-formal)"@en .
+kt:val-se-ya     a crm:E55_Type ; skos:broader kt:dim-sentence-ending ; rdfs:label "-야·-어"@ko , "-ya/-eo (informal)"@en .
+kt:val-se-seumni a crm:E55_Type ; skos:broader kt:dim-sentence-ending ; rdfs:label "-습니다"@ko , "-seumnida (polite formal)"@en .
+
+# 2. 수신자 호칭
+kt:val-ad-neo     a crm:E55_Type ; skos:broader kt:dim-addressee-term ; rdfs:label "너"@ko , "neo (you, informal)"@en .
+kt:val-ad-jane    a crm:E55_Type ; skos:broader kt:dim-addressee-term ; rdfs:label "자네"@ko , "jane (you, to an equal)"@en .
+kt:val-ad-hyeong  a crm:E55_Type ; skos:broader kt:dim-addressee-term ; rdfs:label "형"@ko , "hyeong (elder brother)"@en .
+kt:val-ad-kun     a crm:E55_Type ; skos:broader kt:dim-addressee-term ; rdfs:label "君"@ko , "君 (kimi)"@en ;
+    skos:scopeNote "2인칭 호칭 君. 이 호칭이 어느 언어를 거친 흔적인지에 대한 해석은 개별 비평 진술에 남긴다."@ko , "The second-person address 君. Interpretations of which language it is a trace of are left to individual critical statements."@en .
+kt:val-ad-avoid   a crm:E55_Type ; skos:broader kt:dim-addressee-term ; rdfs:label "호명회피"@ko , "address avoided"@en .
+
+# 3. 어휘 색채
+kt:val-lr-hanmun   a crm:E55_Type ; skos:broader kt:dim-lexical-register ; rdfs:label "한문투"@ko , "Sino-Korean style"@en .
+kt:val-lr-neutral  a crm:E55_Type ; skos:broader kt:dim-lexical-register ; rdfs:label "중립"@ko , "neutral"@en .
+kt:val-lr-modern   a crm:E55_Type ; skos:broader kt:dim-lexical-register ; rdfs:label "현대적"@ko , "modern"@en .
+kt:val-lr-japanese a crm:E55_Type ; skos:broader kt:dim-lexical-register ; rdfs:label "일본어투"@ko , "Japanese-style expressions"@en ;
+    skos:scopeNote "彼女·接吻·物語 등 일본어식 표현. 경유 언어에 대한 해석은 개별 비평 진술에 남긴다."@ko , "Japanese-style expressions such as 彼女, 接吻, 物語. Interpretations about the route language are left to individual critical statements."@en .
+
+# 4. 고유명 처리
+kt:val-pn-original a crm:E55_Type ; skos:broader kt:dim-proper-noun ; rdfs:label "원음"@ko , "original sound"@en .
+kt:val-pn-domestic a crm:E55_Type ; skos:broader kt:dim-proper-noun ; rdfs:label "자국화"@ko , "domesticated"@en .
+kt:val-pn-replaced a crm:E55_Type ; skos:broader kt:dim-proper-noun ; rdfs:label "대체·생략"@ko , "replaced or omitted"@en .
+
+# 5. 자연스러움·가독성
+kt:val-na-natural  a crm:E55_Type ; skos:broader kt:dim-naturalness ; rdfs:label "자연스럽다"@ko , "natural"@en .
+kt:val-na-awkward  a crm:E55_Type ; skos:broader kt:dim-naturalness ; rdfs:label "어색하다"@ko , "awkward"@en .
+kt:val-na-dry      a crm:E55_Type ; skos:broader kt:dim-naturalness ; rdfs:label "건조하다"@ko , "dry"@en .
+
+# 6. 정확성
+kt:val-ac-correct a crm:E55_Type ; skos:broader kt:dim-accuracy ; rdfs:label "정확"@ko , "accurate"@en .
+kt:val-ac-error   a crm:E55_Type ; skos:broader kt:dim-accuracy ; rdfs:label "오역있음"@ko , "contains errors"@en .
+
+# 7. 충실도
+kt:val-fi-faithful a crm:E55_Type ; skos:broader kt:dim-fidelity ; rdfs:label "충실"@ko , "faithful"@en .
+kt:val-fi-reduced  a crm:E55_Type ; skos:broader kt:dim-fidelity ; rdfs:label "축소·생략"@ko , "reduced or omitted"@en .
+kt:val-fi-expanded a crm:E55_Type ; skos:broader kt:dim-fidelity ; rdfs:label "부연·의역"@ko , "expanded or paraphrased"@en .
+
+# 8. 오역 이력
+kt:val-eh-corrected a crm:E55_Type ; skos:broader kt:dim-error-history ; rdfs:label "선행오역수정"@ko , "corrects earlier errors"@en .
+kt:val-eh-inherited a crm:E55_Type ; skos:broader kt:dim-error-history ; rdfs:label "답습"@ko , "repeats earlier errors"@en .
+
+# 9. 사회비판 전달
+kt:val-sc-kept    a crm:E55_Type ; skos:broader kt:dim-social-critique ; rdfs:label "살림"@ko , "kept"@en .
+kt:val-sc-weakened a crm:E55_Type ; skos:broader kt:dim-social-critique ; rdfs:label "약화·삭제"@ko , "weakened or removed"@en .
+
+# 10. 해석 프레임
+kt:val-if-romance a crm:E55_Type ; skos:broader kt:dim-interpretive-frame ; rdfs:label "연애소설"@ko , "love story"@en .
+kt:val-if-social  a crm:E55_Type ; skos:broader kt:dim-interpretive-frame ; rdfs:label "사회비판"@ko , "social critique"@en .
+kt:val-if-existential a crm:E55_Type ; skos:broader kt:dim-interpretive-frame ; rdfs:label "실존적"@ko , "existential"@en .
+
+
+#################################################################
+# 7. 보조 유형
+#################################################################
+
+kt:type-criticism a crm:E55_Type ;
+    rdfs:label "번역비평 진술"@ko , "translation criticism statement"@en ;
+    skos:scopeNote "crm:E13_Attribute_Assignment 인스턴스가 번역비평 진술임을 표시한다."@ko , "Marks a crm:E13_Attribute_Assignment instance as a statement of translation criticism."@en .
+
+kt:type-translation-event a crm:E55_Type ;
+    rdfs:label "번역 행위"@ko , "translation event"@en .
+
+kt:type-source-paragraph a crm:E55_Type ;
+    rdfs:label "원문층 문단"@ko , "source paragraph"@en ;
+    skos:scopeNote "비평 원문의 자연 문단. 모든 진술의 근거(provenance)가 된다."@ko , "A paragraph of the critical essay; the provenance of every statement."@en .
+
+kt:type-sentence a crm:E55_Type ;
+    rdfs:label "문장"@ko , "sentence"@en ;
+    skos:scopeNote "대목 정렬용 문장 단위 조각."@ko , "A sentence-level segment for aligning passages."@en .
+
+kt:type-title a crm:E55_Type ;
+    rdfs:label "제목 표기형"@ko , "title nomen"@en .
+
+kt:type-term-rendering a crm:E55_Type ;
+    rdfs:label "역어 관계"@ko , "term rendering"@en ;
+    skos:scopeNote "원어 Nomen과 역어 Nomen의 관계. 데이터에서는 lrmoo:R56_has_related_form 으로만 잇고 R56.1은 쓰지 않는다."@ko , "The relation between the original and the translated Nomen. The data links them with lrmoo:R56_has_related_form only; R56.1 is not used."@en .
+
+
+#################################################################
+# 8. 언어
+#################################################################
+
+kt:lang-de a crm:E56_Language ; rdfs:label "독일어"@ko , "German"@en ;
+    crm:P1_is_identified_by <http://id.loc.gov/vocabulary/iso639-1/de> .
+kt:lang-ko a crm:E56_Language ; rdfs:label "한국어"@ko , "Korean"@en ;
+    crm:P1_is_identified_by <http://id.loc.gov/vocabulary/iso639-1/ko> .
+kt:lang-zh a crm:E56_Language ; rdfs:label "중국어"@ko , "Chinese"@en ;
+    crm:P1_is_identified_by <http://id.loc.gov/vocabulary/iso639-1/zh> .
+kt:lang-ja a crm:E56_Language ; rdfs:label "일본어"@ko , "Japanese"@en ;
+    crm:P1_is_identified_by <http://id.loc.gov/vocabulary/iso639-1/ja> .
+kt:lang-en a crm:E56_Language ; rdfs:label "영어"@ko , "English"@en ;
+    crm:P1_is_identified_by <http://id.loc.gov/vocabulary/iso639-1/en> .
+
+
+#################################################################
+# 9. 저본 확실성
+#################################################################
+
+kt:scheme-certainty a skos:ConceptScheme ; rdfs:label "저본 확실성"@ko , "source certainty"@en .
+
+kt:cert-confirmed a crm:E55_Type ; skos:inScheme kt:scheme-certainty ;
+    rdfs:label "확인"@ko , "confirmed"@en ;
+    skos:scopeNote "선행 연구나 역자 자신이 저본을 명시한 경우."@ko , "A published study or the translator names the source."@en .
+kt:cert-inferred a crm:E55_Type ; skos:inScheme kt:scheme-certainty ;
+    rdfs:label "추정"@ko , "inferred"@en ;
+    skos:scopeNote "연구자가 정황으로 추정한 경우. 판본이 특정되기도 하고 안 되기도 한다."@ko , "A scholar infers the source from circumstances; the edition may or may not be identified."@en .
