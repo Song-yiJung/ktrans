@@ -6,8 +6,8 @@
 
 | | |
 |---|---|
-| 시연 페이지 · Demo | [`demo/index.html`](demo/index.html) — 내려받아 브라우저로 열면 바로 볼 수 있습니다 · download and open in any browser |
-| 스프레드시트 · Spreadsheet | [`docs/ktrans_v3.1_데이터.xlsx`](docs/ktrans_v3.1_데이터.xlsx) (Google 스프레드시트 · Google Sheet: _링크 추가 · add link_) |
+| 시연 페이지 · Demo | **<https://song-yijung.github.io/ktrans/demo/>** · 또는 [`demo/index.html`](demo/index.html)을 내려받아 브라우저로 열면 인터넷 없이도 볼 수 있습니다 · or download it and open it offline in any browser |
+| 스프레드시트 · Spreadsheet | [`docs/ktrans_v3.1_데이터.xlsx`](docs/ktrans_v3.1_데이터.xlsx) · **[Google 스프레드시트 · Google Sheet](https://docs.google.com/spreadsheets/d/1-iwbldEObjvjWl-Oa7h76vjLa5zoVH1z/edit?usp=sharing)** |
 | 스키마 · Schema | [`ontology/ktrans-schema.ttl`](ontology/ktrans-schema.ttl) |
 | 데이터 · Data | [`data/ktrans-data.ttl`](data/ktrans-data.ttl) |
 | 질의 · Queries | [`queries/ktrans_demo.ipynb`](queries/ktrans_demo.ipynb) |
