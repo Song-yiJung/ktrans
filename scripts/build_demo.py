@@ -265,6 +265,79 @@ def ask_demo(g, trs):
     return {"question": ASK_QUESTION, "answer": ASK_ANSWER, "meta": ASK_META, "rows": rows, "card": card}, q
 
 
+# ---- 그림과 TTL: 노드 하나를 주어로 한 트리플 줄 (시연의 '그림과 TTL로 보기')
+VOCAB = ("via-", "cert-", "dim-", "val-", "st-", "ft-", "type-", "cov-", "lang-")
+HL_PRED = {"crm:P16_used_specific_object", "ktrans:hasPolarity"}
+
+
+def tri_rows(g, node, subj_title, names):
+    from rdflib import URIRef, BNode, Literal
+    from rdflib.namespace import RDFS
+    P82 = URIRef("http://www.cidoc-crm.org/cidoc-crm/7.1.3/P82_at_some_time_within")
+    sid = short(node)
+
+    def label(o):
+        loc = str(o).replace(KT, "")
+        if loc in names:
+            return names[loc]
+        m = re.match(r"SP0*(\d+)$", loc)
+        if m:
+            return f"paragraph {m.group(1)}"
+        en = [str(l) for l in g.objects(o, RDFS.label) if getattr(l, "language", None) == "en"]
+        ko = [str(l) for l in g.objects(o, RDFS.label)]
+        t = en[0] if en else (ko[0] if ko else short(o))
+        t = ROMAN.get(t, t)
+        return t if len(t) <= 46 else t[:44].rstrip() + " …"
+
+    out = []
+    for p_, o in g.predicate_objects(node):
+        ps = short(p_).replace("https://ktrans.aks.ac.kr/ontology#", "ktrans:").replace(str(RDFS), "rdfs:")
+        if isinstance(o, Literal) and o.language == "ko" and ps in ("rdfs:label", "crm:P3_has_note"):
+            continue
+        if ps == "a":
+            k, ot, os_ = "k", short(o).split(":", 1)[1].replace("_", " "), short(o)
+            ot = re.sub(r"^[EF]\d+ ", lambda m: m.group(0), ot)
+        elif isinstance(o, BNode):
+            ys = [str(y) for y in g.objects(o, P82)]
+            k, ot, os_ = "v", ys[0] if ys else "…", f'[ … "{ys[0]}" ]' if ys else "[ … ]"
+        elif isinstance(o, URIRef):
+            loc = str(o).replace(KT, "")
+            k = "k" if loc.startswith(VOCAB) or not str(o).startswith(KT) and ps == "a" else "n"
+            ot, os_ = label(o), short(o)
+        else:
+            txt = str(o).split("\n")[0]
+            if ps == "ktrans:hasPolarity":
+                ot = {"+": "+ gain", "-": "− loss", "0": "0 neither"}.get(txt, txt)
+            else:
+                ot = txt if len(txt) <= 46 else txt[:44].rstrip() + " …"
+            lang = f"@{o.language}" if o.language else ""
+            os_ = '"' + (txt if len(txt) <= 34 else txt[:32].rstrip() + " …") + '"' + lang
+            k = "v"
+        ps = ps.replace("crm:", "crm:").replace("lrmoo:", "lrmoo:")
+        out.append({"st": subj_title, "s": sid, "p": ps, "ot": ot, "o": os_, "k": k,
+                    "hl": ps in HL_PRED or (ps == "crm:P2_has_type" and str(o).replace(KT, "").startswith(("via-", "cert-")))})
+    order = ["a", "lrmoo:R17_created", "crm:P140_assigned_attribute_to", "lrmoo:R19_created_a_realisation_of",
+             "crm:P14_carried_out_by", "crm:P4_has_time-span", "crm:P2_has_type", "crm:P177_assigned_property_of_type",
+             "crm:P141_assigned", "ktrans:hasPolarity", "crm:P16_used_specific_object", "rdfs:label", "crm:P3_has_note"]
+    out.sort(key=lambda r: (order.index(r["p"]) if r["p"] in order else 50, r["o"]))
+    return out
+
+
+def graphs_for(g, trs):
+    from rdflib import URIRef
+    names = {t["id"]: f"{t['translatorEn'].split(' (')[0]}'s Werther ({t['year']})" for t in trs}
+    names["W01"] = "Werther, the work (F1)"
+    for loc in ("P-김영보", "P-양건식", "P-오천석", "P-김영진", "P-박용철", "P-조향", "P-김동소", "P-김미지", "P-조우호", "P-이유영"):
+        names[loc] = ROMAN.get(loc[2:], loc[2:])
+    out = {}
+    for t in trs:
+        ev = URIRef(KT + "ev-" + t["id"])
+        out["ev-" + t["id"]] = tri_rows(g, ev, "Translation event", names)
+        for st in t["statements"]:
+            out[st["id"]] = tri_rows(g, URIRef(KT + st["id"]), "Statement", names)
+    return out
+
+
 def build(g, out_path):
     forms, trs, paras = collect(g)
     n_stmt = sum(len(t["statements"]) for t in trs)
@@ -276,6 +349,7 @@ def build(g, out_path):
             "observe": sorted(OBSERVE), "mid": MID_UNSPECIFIED,
             "dimEn": DIM_EN}
     data["ask"], q_ask = ask_demo(g, trs)
+    data["graphs"] = graphs_for(g, trs)
     queries = {"forms": Q_FORMS, "colonial": Q_COLONIAL, "routes": Q_ROUTES, "statements": Q_STATEMENTS}
     page = TEMPLATE
     page = page.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))

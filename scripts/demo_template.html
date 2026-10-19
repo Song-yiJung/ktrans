@@ -111,11 +111,33 @@ footer a{color:var(--plum)}
 .sum-en{color:var(--muted);font-size:13.5px}
 .lang{display:flex;gap:6px}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.step{display:grid;gap:10px}
+.step{display:grid;gap:10px;min-width:0;grid-template-columns:minmax(0,1fr)}
+.steps{grid-template-columns:minmax(0,1fr)}
 .ask{font:600 19px/1.5 var(--display);max-width:60ch}
 .answer{margin:0;border-left:3px solid var(--plum);padding:4px 0 4px 14px;font-size:16px;max-width:72ch}
 .cert{font-size:12px}
 code{font:13px var(--mono)}
+/* node · relation · kind · value pictures */
+:root{--c-n:#2F6690;--c-r:#A23B72;--c-k:#2E7D4F;--c-v:#B5651D;--b-n:#E8EFF6;--b-k:#E6F2EA;--b-v:#FBEEE2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-n:#8fb8dc;--c-r:#e48bbb;--c-k:#7fc79a;--c-v:#e0a272;--b-n:transparent;--b-k:transparent;--b-v:transparent}}
+:root[data-theme="dark"]{--c-n:#8fb8dc;--c-r:#e48bbb;--c-k:#7fc79a;--c-v:#e0a272;--b-n:transparent;--b-k:transparent;--b-v:transparent}
+.tri-wrap{display:grid;gap:10px;margin-top:10px}
+.tri{display:grid;gap:5px;min-width:600px}
+.tri .r{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr) minmax(0,1.3fr);align-items:center;padding:3px 6px;border-radius:6px}
+.tri .r.hl{background:var(--hl)}
+.tri .c{border:1.5px solid;border-radius:6px;padding:3px 8px;text-align:center;font:600 13px/1.3 var(--body);min-width:0;overflow-wrap:anywhere}
+.tri .c small{display:block;font:400 11px/1.35 var(--mono)}
+.tri .c.n{color:var(--c-n);border-color:var(--c-n);background:var(--b-n)}
+.tri .c.k{color:var(--c-k);border-color:var(--c-k);background:var(--b-k)}
+.tri .c.v{color:var(--c-v);border-color:var(--c-v);background:var(--b-v)}
+.tri .a{display:grid;gap:2px;padding:0 8px;font:600 11px/1.2 var(--mono);color:var(--c-r);text-align:center;overflow-wrap:anywhere}
+.tri .ln{display:block;height:2px;background:var(--c-r);position:relative;margin-right:6px}
+.tri .ln::after{content:"";position:absolute;right:-7px;top:-4px;border-left:8px solid var(--c-r);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.tri-legend{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.tri-legend b{font-weight:600}
+pre.ttl-c{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:12px;overflow-x:auto;white-space:pre;font-size:12.5px}
+pre.ttl-c .tn{color:var(--c-n);font-weight:600} pre.ttl-c .tr{color:var(--c-r);font-weight:600} pre.ttl-c .tk{color:var(--c-k);font-weight:600} pre.ttl-c .tv{color:var(--c-v)} pre.ttl-c .tc{color:var(--muted)}
+details.tri-d>summary{cursor:pointer;font:500 13px var(--mono);color:var(--plum)}
 </style>
 </head>
 <body>
@@ -170,6 +192,10 @@ code{font:13px var(--mono)}
       <span><i></i>confirmed · 저본 확인</span><span><i class="dash"></i>inferred · 저본 추정</span><span><i class="dot"></i>not stated · 경유 미기재</span>
     </div>
   </div>
+  <div class="panel" style="display:grid;gap:10px">
+    <p style="font-size:14px"><b>Each route in the data.</b> Open one to see its translation event (F28) as a picture and in TTL. <span class="ko">경로마다 데이터에 어떻게 적혀 있는지: 열면 번역 사건(F28)을 그림과 TTL로 봅니다.</span></p>
+    <div id="route-figs" style="display:grid;gap:8px"></div>
+  </div>
   <details class="query"><summary>The SPARQL behind this result · 이 결과를 낸 쿼리</summary><pre>__Q_ROUTES__</pre></details>
 </section>
 
@@ -204,9 +230,9 @@ code{font:13px var(--mono)}
     </li>
     <li class="panel step">
       <div class="eyebrow">2 · The AI receives the RDF · AI가 RDF를 받는다</div>
-      <p>What it receives: the data and the schema, __N_TRIPLES__ triples. For example, the record card (F28) of Kim Yeong-bo's 1923 translation is in the data like this, one triple per line.</p>
-      <p class="ko">받은 것: <code>ktrans-data.ttl</code>과 <code>ktrans-schema.ttl</code>, 트리플 __N_TRIPLES__개. 예를 들어 김영보 1923년 번역의 기록 카드(F28)는 데이터 안에 이렇게 있습니다. 한 줄에 트리플 하나입니다.</p>
-      <div class="packet"><pre id="card"></pre></div>
+      <p>What it receives: the data and the schema, __N_TRIPLES__ triples. For example, the translation event (F28) of Kim Yeong-bo's 1923 translation, first as a picture, then as the TTL lines themselves. Each row is one triple: a node, a relation, and a node, a kind or a value.</p>
+      <p class="ko">받은 것: <code>ktrans-data.ttl</code>과 <code>ktrans-schema.ttl</code>, 트리플 __N_TRIPLES__개. 예를 들어 김영보 1923년 번역의 번역 사건(F28)을 먼저 그림으로, 이어서 데이터에 적힌 TTL 그대로 보여 줍니다. 한 줄이 트리플 하나입니다.</p>
+      <div id="cardfig"></div>
     </li>
     <li class="panel step">
       <div class="eyebrow">3 · The AI writes and runs a query · AI가 쿼리를 쓰고 돌린다</div>
@@ -374,6 +400,7 @@ function showDetail(what, whatEn, list, mark){
       <div class="sum-en">${sum}</div>
       ${extra}
       <details><summary>Source paragraph ${esc(s.para)} (Korean original) · 근거 문단 원문</summary><p>${esc(D.paras[s.para])}</p></details>
+      <details class="tri-d"><summary>This statement as a picture and in TTL · 그림과 TTL로 보기</summary>${triBlock(s.id)}</details>
     </div>`;
   });
   $("#detail").innerHTML = h;
@@ -400,11 +427,32 @@ function showDetail(what, whatEn, list, mark){
   showDetail("김영보 역을 기준으로 한 평가", "Judgements measured against Kim Yeong-bo", base, "김영보");
 })();
 
+
+/* ---------- 노드 → 관계 → 노드 그림과 TTL ---------- */
+function triBlock(key){
+  const rows = (D.graphs || {})[key];
+  if (!rows || !rows.length) return "";
+  const fig = rows.map(r => `<div class="r${r.hl ? " hl" : ""}">
+    <div class="c n">${esc(r.st)}<small>${esc(r.s)}</small></div>
+    <div class="a"><span>${esc(r.p)}</span><span class="ln"></span></div>
+    <div class="c ${r.k}">${esc(r.ot)}<small>${esc(r.o)}</small></div></div>`).join("");
+  const kc = {n: "tn", k: "tk", v: "tv"};
+  const ttl = rows.map(r => `<span class="tn">${esc(r.s)}</span> <span class="tr">${esc(r.p)}</span> <span class="${kc[r.k]}">${esc(r.o)}</span> .`).join("\n")
+    + `\n<span class="tc"># long texts shortened with …; labels and notes also exist in Korean (@ko)</span>`;
+  return `<div class="tri-wrap"><div class="scroll"><div class="tri">${fig}</div></div>
+    <div class="tri-legend"><span style="color:var(--c-n)">■ <b>node</b> 노드</span><span style="color:var(--c-r)">■ <b>relation</b> 관계</span><span style="color:var(--c-k)">■ <b>kind</b> 종류</span><span style="color:var(--c-v)">■ <b>value</b> 값</span><span>yellow rows: source, route, certainty, sign · 노란 줄: 저본·경유·확실성·부호</span></div>
+    <pre class="ttl-c">${ttl}</pre></div>`;
+}
+(function routeFigs(){
+  const el = $("#route-figs"); if (!el) return;
+  el.innerHTML = T.filter(t => t.cert).map(t => `<details class="tri-d"><summary>${esc(shortEn(t))} · ${esc(shortT(t))} — translation event kt:ev-${esc(t.id)}</summary>${triBlock("ev-" + t.id)}</details>`).join("");
+})();
+
 /* ---------- 질문 4 ---------- */
 (function ai(){
   const A = D.ask;
   let lang = "en", cur = 0;
-  $("#card").textContent = A.card.join("\n");
+  $("#cardfig").innerHTML = triBlock("ev-T001");
   $("#ask-n").textContent = A.rows.length;
   const certW = {ko: {"cert-confirmed": "확인", "cert-inferred": "추정"}, en: {"cert-confirmed": "confirmed", "cert-inferred": "inferred"}};
   const opts = [{ko: "다섯 종 모두", en: "All five", get: l => T.map(t => l === "en" ? t.packetEn : t.packet).join("\n\n")},
