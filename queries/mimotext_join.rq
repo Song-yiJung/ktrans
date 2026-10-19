@@ -1,0 +1,16 @@
+# What "linked to MiMoText" means today (tested 19 October 2026)
+# Load both files into one store:
+#   data/ktrans-data.ttl
+#   MiMoText RDF dump of 20 September 2024 (data.mimotext.uni-trier.de;
+#   its "//data.mimotext..." IRIs were read as "http://data.mimotext...")
+# The query joins the two graphs on the shared Wikidata ID.
+# Result: 1 row — Goethe (wd:Q5879): kt:P-goethe and MiMoText Q415, with 0 MiMoText works by him.
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/7.1.3/>
+PREFIX mdt: <http://data.mimotext.uni-trier.de/prop/direct/>
+
+SELECT ?wikidata ?ktPerson ?mimoPerson (COUNT(DISTINCT ?work) AS ?mimoWorks) WHERE {
+  ?ktPerson crm:P1_is_identified_by ?wikidata .
+  ?mimoPerson mdt:P13 ?wikidata .
+  OPTIONAL { ?work mdt:P5 ?mimoPerson }
+}
+GROUP BY ?wikidata ?ktPerson ?mimoPerson

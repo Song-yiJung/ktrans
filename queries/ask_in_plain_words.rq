@@ -1,0 +1,22 @@
+# Question in plain words (asked on 19 October 2026):
+#   Which Korean Werther translations were made through another language,
+#   through which version, and who says so?
+#   어떤 한국어 베르터 번역이 다른 언어를 거쳐 옮겨졌고, 무엇을 거쳤으며, 누가 그렇게 말했나요?
+# The language model (Claude, configured model claude-opus-5-5) was given the RDF data (data/ktrans-data.ttl)
+# and the schema, wrote this query, ran it on the data and answered from the rows.
+# One question, one try: not yet a tested tool.
+PREFIX lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/>
+PREFIX crm:   <http://www.cidoc-crm.org/cidoc-crm/7.1.3/>
+PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX kt:    <https://ktrans.aks.ac.kr/id/>
+
+SELECT ?translation ?year ?source ?certainty ?note WHERE {
+  ?event lrmoo:R17_created ?translation .
+  ?event crm:P2_has_type kt:via-relay .
+  ?event crm:P2_has_type ?certainty .
+  FILTER(STRSTARTS(STR(?certainty), STR(kt:cert-)))
+  OPTIONAL { ?event crm:P4_has_time-span/crm:P82_at_some_time_within ?year }
+  OPTIONAL { ?event crm:P16_used_specific_object/rdfs:label ?source . FILTER(lang(?source) = "en") }
+  OPTIONAL { ?event crm:P3_has_note ?note . FILTER(lang(?note) = "en") }
+}
+ORDER BY ?year

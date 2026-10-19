@@ -104,7 +104,7 @@ ROMAN = {"김영보": "Kim Yeong-bo", "양건식": "Yang Geon-sik (Baek-hwa)", "
          "김미지": "Kim Mi-ji", "이유영": "Lee Yu-yeong", "조우호": "Jo U-ho"}
 FORM_EN = {"신문 연재": "newspaper serial", "잡지 연재": "magazine serial", "잡지 게재": "single magazine issue",
            "잡지 부록": "magazine supplement", "단행본": "book"}
-DIM_EN = {}
+DIM_EN = {"정확성": "accuracy", "오역 이력": "error history"}
 
 DIM_ORDER = ["종결어미체", "수신자 호칭", "어휘 색채", "고유명 처리",
              "자연스러움·가독성", "정확성", "충실도", "오역 이력", "사회비판 전달", "해석 프레임"]
@@ -112,8 +112,8 @@ OBSERVE = set(DIM_ORDER[:4])
 
 # 판본이 특정되지 않은 중역 — 중간 저본 칸에 쓸 짧은 이름 (F28 메모의 요약)
 MID_UNSPECIFIED = {
-    "T045": ("일본어역 3~4종 · 영역 1종", "3–4 Japanese and 1 English version", "판본 미특정 · editions not identified"),
-    "T048": ("일본어역", "a Japanese version", "판본 미특정 · edition not identified"),
+    "T045": ("3–4 Japanese and 1 English version", "일본어역 3~4종 · 영역 1종", "editions not identified · 판본 미특정"),
+    "T048": ("a Japanese version", "일본어역", "edition not identified · 판본 미특정"),
 }
 
 
@@ -216,6 +216,55 @@ def packet(t, en=False):
     return "\n".join(out)
 
 
+ASK_QUESTION = {
+    "ko": "어떤 한국어 베르터 번역이 다른 언어를 거쳐 옮겨졌고, 무엇을 거쳤으며, 누가 그렇게 말했나요?",
+    "en": "Which Korean Werther translations were made through another language, through which version, and who says so?"}
+# 2026-10-19, Claude(claude-opus-5-5)가 ask_in_plain_words.rq의 결과 네 줄만 보고 쓴 답 (기록)
+ASK_ANSWER = {
+    "ko": "중역 경로가 기록된 번역은 1923년부터 1932년까지의 네 종입니다. 거친 판본까지 알려진 것은 둘입니다. 김영보(1923)는 다카야마 초규의 일본어역(1891)을 거쳤고, 이는 김동소의 추정입니다(para_12). 양건식(1923)은 궈모뤄의 중국어역(1922)을 거쳤고, 김미지가 확인했습니다(para_24). 오천석(1925)은 서문에서 일본어본 서너 종과 영역본 한 종을 대조했다고 밝혔지만 판본은 알 수 없습니다(para_41). 박용철(1932)은 조향이 일본어본을 저본으로 추정하며, 판본은 밝혀지지 않았습니다(para_59).",
+    "en": "Four translations have a recorded relay route, all between 1923 and 1932. For two we know the exact version: Kim Yeong-bo (1923) used Takayama Chogyū's Japanese translation (1891), as inferred by Kim Dong-so (para_12), and Yang Geon-sik (1923) used Guo Moruo's Chinese translation (1922), as established by Kim Mi-ji (para_24). Oh Cheon-seok (1925) says in his preface that he compared three or four Japanese versions and one English version, which are not identified (para_41). For Park Yong-cheol (1932), Jo Hyang infers a Japanese version; the edition is not identified (para_59)."}
+ASK_META = {
+    "ko": "2026년 10월 19일 · Claude(claude-opus-5-5)가 RDF 데이터를 받아 위 쿼리를 쓰고 돌린 뒤, 결과 네 줄만 보고 쓴 답입니다.",
+    "en": "19 October 2026 · Claude (claude-opus-5-5) received the RDF data, wrote and ran the query above, and answered from the four rows only."}
+ASK_FILE = __file__.replace("scripts/build_demo.py", "queries/ask_in_plain_words.rq")
+KT = "https://ktrans.aks.ac.kr/id/"
+
+
+def short(u):
+    u = str(u)
+    for k, v in (("https://ktrans.aks.ac.kr/id/", "kt:"), ("http://iflastandards.info/ns/lrm/lrmoo/", "lrmoo:"),
+                 ("http://www.cidoc-crm.org/cidoc-crm/7.1.3/", "crm:"), ("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "a")):
+        if u.startswith(k):
+            return v + u[len(k):]
+    return u
+
+
+def ask_demo(g, trs):
+    """질문 4: 평범한 말의 질문 -> AI가 쓴 쿼리를 다시 돌린 결과 + 기록된 답"""
+    from rdflib import URIRef, BNode
+    q = open(ASK_FILE, encoding="utf-8").read()
+    by_id = {t["id"]: t for t in trs}
+    rows = []
+    for r in g.query(q):
+        tid = str(r.translation).replace(KT, "")
+        t = by_id.get(tid, {})
+        rows.append({"id": "kt:" + tid, "title": t.get("title", tid), "translator": t.get("translatorEn", ""),
+                     "year": str(r.year), "source": str(r.source) if r.source else "",
+                     "cert": str(r.certainty).replace(KT, ""), "note": str(r.note).replace("\n", " ")})
+    card = []
+    ev = URIRef(KT + "ev-T001")
+    for p, o in sorted(g.predicate_objects(ev), key=lambda x: (short(x[0]) != "a", short(x[0]))):
+        if isinstance(o, BNode):
+            ys = [str(y) for y in g.objects(o, URIRef("http://www.cidoc-crm.org/cidoc-crm/7.1.3/P82_at_some_time_within"))]
+            o_txt = f'[ … "{ys[0]}" ]' if ys else "[ … ]"
+        elif isinstance(o, URIRef):
+            o_txt = short(o)
+        else:
+            o_txt = '"' + str(o).split("\n")[0] + ' …"@' + (o.language or "")
+        card.append(f"kt:ev-T001  {short(p)}  {o_txt} .")
+    return {"question": ASK_QUESTION, "answer": ASK_ANSWER, "meta": ASK_META, "rows": rows, "card": card}, q
+
+
 def build(g, out_path):
     forms, trs, paras = collect(g)
     n_stmt = sum(len(t["statements"]) for t in trs)
@@ -226,11 +275,13 @@ def build(g, out_path):
     data = {"translations": trs, "paras": paras, "forms": forms, "dims": DIM_ORDER,
             "observe": sorted(OBSERVE), "mid": MID_UNSPECIFIED,
             "dimEn": DIM_EN}
+    data["ask"], q_ask = ask_demo(g, trs)
     queries = {"forms": Q_FORMS, "colonial": Q_COLONIAL, "routes": Q_ROUTES, "statements": Q_STATEMENTS}
     page = TEMPLATE
     page = page.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
     for k, q in queries.items():
         page = page.replace(f"__Q_{k.upper()}__", html.escape(PREFIX + "\n" + q))
+    page = page.replace("__Q_ASK__", html.escape(q_ask))
     page = page.replace("__N_TRANS__", str(len(trs)))
     page = page.replace("__N_STMT__", str(n_stmt))
     page = page.replace("__CRITICS__", "·".join(critics))

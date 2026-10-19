@@ -6,11 +6,12 @@
 
 | | |
 |---|---|
+| 발표 슬라이드 · Slides | [`slides/From_Design_to_Data_Trier_2026.pdf`](slides/From_Design_to_Data_Trier_2026.pdf) (PDF) |
 | 시연 페이지 · Demo | **<https://song-yijung.github.io/ktrans/demo/>** · 또는 [`demo/index.html`](demo/index.html)을 내려받아 브라우저로 열면 인터넷 없이도 볼 수 있습니다 · or download it and open it offline in any browser |
 | 스프레드시트 · Spreadsheet | [`docs/ktrans_v3.1_데이터.xlsx`](docs/ktrans_v3.1_데이터.xlsx) · **[Google 스프레드시트 · Google Sheet](https://docs.google.com/spreadsheets/d/1-iwbldEObjvjWl-Oa7h76vjLa5zoVH1z/edit?usp=sharing)** |
 | 스키마 · Schema | [`ontology/ktrans-schema.ttl`](ontology/ktrans-schema.ttl) |
 | 데이터 · Data | [`data/ktrans-data.ttl`](data/ktrans-data.ttl) |
-| 질의 · Queries | [`queries/ktrans_demo.ipynb`](queries/ktrans_demo.ipynb) |
+| 질의 · Queries | [`queries/ktrans_demo.ipynb`](queries/ktrans_demo.ipynb) · [Colab에서 바로 실행 · Run in Colab](https://colab.research.google.com/github/Song-yiJung/ktrans/blob/main/queries/ktrans_demo.ipynb) (설치 불필요, 깃허브의 데이터를 읽음 · no setup, reads the data from GitHub) |
 
 ## 이 데이터는 무엇인가 · What this is
 
@@ -74,7 +75,7 @@ The author works on art history and cultural heritage data, not literary studies
 1. 어떤 형태로 실렸나 · In what form? — 다섯 종 가운데 세 종이 신문·잡지 연재. UeDeKo 서지 271종 중 신문·잡지 연재와 게재는 모두 1923–1932년. · Three of five were serialised; in UeDeKo every newspaper or magazine publication falls in 1923–1932.
 2. 무엇을 거쳐 옮겼나 · Through which languages? — 저본이 밝혀진 네 종 모두 중역(일본어·중국어·영어). 김영진 역은 ‘미기재’. · All four identified sources are relays (Japanese, Chinese, English); Kim Yeong-jin's route is 'not stated'.
 3. 후대 연구자들은 어떻게 평가하나 · How do later scholars judge them? — 비평 진술 64건. 1920~30년대 당시의 비평은 이 데이터에 없음. · 64 statements, all by present-day scholars; no criticism from the 1920s–30s is in the data.
-4. AI에게 넘기는 맥락 · What an AI receives — 쿼리 결과를 이어 붙인 텍스트, 한국어와 영어. · The query results joined as text, in Korean and English.
+4. 평범한 말로 묻기 · Asked in plain words — AI가 RDF 데이터를 받아 SPARQL을 직접 쓰고 돌린 뒤, 결과 네 줄만으로 답한 기록(2026-10-19, 질문 하나·한 번). 쿼리는 [`queries/ask_in_plain_words.rq`](queries/ask_in_plain_words.rq). 쿼리 결과를 텍스트로 넘기는 방법도 함께 있음. · An AI receives the RDF, writes and runs a SPARQL query, and answers from the four rows only (one question, one try, 19 October 2026). The results-as-text way is kept below it.
 
 ## 폴더 · Folders
 
@@ -86,10 +87,21 @@ docs/       ktrans_v3.1_데이터.xlsx      사람이 읽는 판 (TTL에서 생�
 demo/       index.html                   일제강점기 시연 (TTL에서 생성) · colonial-era demo, generated from the TTL
 queries/    ktrans_demo.ipynb            Q1–Q11 질의와 그래프 · queries and charts
             live_demo.ipynb              발표 중 실시간 시연 셀 · live cell for the talk
+            ask_in_plain_words.rq        AI가 쓴 쿼리 (시연 질문 4) · the query the AI wrote (demo question 4)
+            mimotext_join.rq             MiMoText와 위키데이터 ID로 잇기 (시험) · join with MiMoText on the Wikidata ID (test)
+slides/     From_Design_to_Data_Trier_2026.pdf   발표 슬라이드 · the slides
 scripts/    파이프라인 스크립트 · pipeline scripts
 source/     UeDeKo 원자료와 중간 산출물 · UeDeKo sources and intermediate files
+            UeDeKo_Werther_원문층.xlsx   비평 원문 183문단 (진술의 근거) · critique, 183 paragraphs
+            UeDeKo_Werther_구조층_초안.xlsx  비평 진술 태깅 · statement tagging
+source/uedeko/  UeDeKo에서 수집한 그대로 · as collected from UeDeKo
+            UeDeKo_Werther_서지_318.xlsx      번역 서지 318건 (CSV·JSON과 같은 내용) · bibliography, 318 rows
+            UeDeKo_Werther_비평원문_181.xlsx  번역비평 원문 첫 수집본 181단락 · critique, first scrape
 source/en/  영어 대응표 · English translation tables
 ```
+
+엑셀 파일은 모든 칸을 글자로 저장해서 한글이 깨지거나 1923.1 같은 연도가 숫자로 바뀌지 않습니다. CSV를 엑셀에서 열 때 한글이 깨지면 이 엑셀 파일을 쓰세요.
+The Excel files store every cell as text, so Korean and dates such as 1923.1 stay as they are. If a CSV shows broken Korean in Excel, use the Excel file instead.
 
 ## 다시 만들기 · Rebuild
 

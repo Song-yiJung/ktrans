@@ -36,6 +36,8 @@ h3{font-size:17px}
 p{margin:0;max-width:68ch}
 .eyebrow{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--plum)}
 .en{color:var(--muted);font-size:.86em}
+.ko{color:var(--muted);font-size:.84em}
+.ko.block{display:block;margin-top:2px}
 .muted{color:var(--muted)}
 header{display:grid;gap:18px}
 .lead{font-size:17px}
@@ -102,11 +104,18 @@ details.query pre{margin-top:10px;background:var(--paper);border:1px solid var(-
 .row-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 footer{display:grid;gap:8px;font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:18px}
 footer a{color:var(--plum)}
+.links{font-size:14px}.links a{color:var(--plum);font-weight:600}
 @media (max-width:640px){.panel{padding:14px}th,td{padding:7px 6px}}
 @media (prefers-reduced-motion:no-preference){.tab,button,.matrix td{transition:background-color .15s,border-color .15s}}
 .ko+.en,.en.block{display:block;margin-top:2px}
 .sum-en{color:var(--muted);font-size:13.5px}
 .lang{display:flex;gap:6px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.step{display:grid;gap:10px}
+.ask{font:600 19px/1.5 var(--display);max-width:60ch}
+.answer{margin:0;border-left:3px solid var(--plum);padding:4px 0 4px 14px;font-size:16px;max-width:72ch}
+.cert{font-size:12px}
+code{font:13px var(--mono)}
 </style>
 </head>
 <body>
@@ -114,98 +123,123 @@ footer a{color:var(--plum)}
 
 <header>
   <div class="eyebrow">ktrans · live demo · Trier, 20 October 2026</div>
-  <h1>베르터, 1923–1932<span class="en block" style="font-size:.5em;font-family:var(--body);font-weight:500;margin-top:8px">Werther in colonial Korea</span></h1>
-  <p class="lead">일제강점기에 『젊은 베르터의 고뇌』는 어떤 형태로 실렸고, 무엇을 거쳐 한국어가 되었으며, 후대 연구자들은 그 번역들을 어떻게 평가하는가. UeDeKo의 서지 표와 번역비평 줄글을 RDF로 옮긴 데이터에 이 질문을 던진 결과입니다.</p>
-  <p class="en">In what form did Werther appear in colonial Korea, through which languages did it reach Korean, and how do later scholars judge those translations? These are the answers from the UeDeKo bibliography and critical essay, converted into RDF. Every figure below is a SPARQL result on ktrans-data.ttl.</p>
+  <p class="links"><a href="../slides/From_Design_to_Data_Trier_2026.pdf">Slides (PDF) · 발표 슬라이드</a> · <a href="https://github.com/Song-yiJung/ktrans">GitHub repository · 저장소</a></p>
+  <h1>Werther in colonial Korea<span class="ko block" style="font-size:.5em;font-family:var(--body);font-weight:500;margin-top:8px">베르터, 1923–1932</span></h1>
+  <p class="lead">In what form did Werther appear in colonial Korea, through which languages did it reach Korean, and how do later scholars judge those translations? These are the answers from the UeDeKo bibliography and critical essay, converted into RDF. Every figure below is a SPARQL result on ktrans-data.ttl.</p>
+  <p class="ko lead">일제강점기에 『젊은 베르터의 고뇌』는 어떤 형태로 실렸고, 무엇을 거쳐 한국어가 되었으며, 후대 연구자들은 그 번역들을 어떻게 평가하는가. UeDeKo의 서지 표와 번역비평 줄글을 RDF로 옮긴 데이터에 이 질문을 던진 결과입니다.</p>
   <div class="facts">
-    <div><b>__N_TRANS__</b><span>일제강점기 번역 · translations</span></div>
-    <div><b>__N_STMT__</b><span>비평 진술 · critical statements</span></div>
-    <div><b class="small">__CRITICS__</b><span>진술 주체 · __CRITICS_EN__</span></div>
-    <div><b>__N_TRIPLES__</b><span>트리플 · triples queried</span></div>
+    <div><b>__N_TRANS__</b><span>translations · 일제강점기 번역</span></div>
+    <div><b>__N_STMT__</b><span>critical statements · 비평 진술</span></div>
+    <div><b class="small">__CRITICS_EN__</b><span>speakers · 진술 주체 (__CRITICS__)</span></div>
+    <div><b>__N_TRIPLES__</b><span>triples queried · 트리플</span></div>
   </div>
   <div class="note-box">
-    <p><b>평가의 주체는 후대 연구자입니다.</b> 비평 진술은 UeDeKo 번역비평(필자 조향)과 그 안에 인용된 연구자들의 서술에서 나왔습니다. 1920~30년대 당시의 비평은 이 데이터에 없습니다.</p>
-    <p class="en"><b>The judges are later scholars.</b> All evaluations come from present-day scholarship: the UeDeKo critical essay by Jo Hyang and the studies it cites. No criticism from the 1920s and 30s is in the data.</p>
+    <p><b>The judges are later scholars.</b> All evaluations come from present-day scholarship: the UeDeKo critical essay by Jo Hyang and the studies it cites. No criticism from the 1920s and 30s is in the data.</p>
+    <p class="ko"><b>평가의 주체는 후대 연구자입니다.</b> 비평 진술은 UeDeKo 번역비평(필자 조향)과 그 안에 인용된 연구자들의 서술에서 나왔습니다. 1920~30년대 당시의 비평은 이 데이터에 없습니다.</p>
   </div>
 </header>
 
 <section id="form">
   <div class="qhead">
-    <div class="qnum">질문 1 · Question 1 · Form</div>
-    <h2>어떤 형태로 실렸나<span class="en block" style="font-size:.62em">In what form did it appear?</span></h2>
-    <p>다섯 종 가운데 세 종이 신문·잡지 연재입니다. UeDeKo 레코드 여러 건이 한 작품으로 묶인 자리가 바로 이 연재들입니다.</p>
-    <p class="en">Three of the five were serialised in newspapers or magazines. These serials are exactly where several UeDeKo records had to be merged into one work.</p>
+    <div class="qnum">Question 1 · Form · 질문 1</div>
+    <h2>In what form did it appear?<span class="ko block" style="font-size:.62em">어떤 형태로 실렸나</span></h2>
+    <p>Three of the five were serialised in newspapers or magazines. These serials are exactly where several UeDeKo records had to be merged into one work.</p>
+    <p class="ko">다섯 종 가운데 세 종이 신문·잡지 연재입니다. UeDeKo 레코드 여러 건이 한 작품으로 묶인 자리가 바로 이 연재들입니다.</p>
   </div>
   <div class="panel"><div class="scroll" id="timeline"></div></div>
   <div class="panel scroll"><table id="tr-table"></table></div>
   <div class="panel">
-    <h3>전체 271종의 게재 형태 <span class="en">· Publication form, all 271 translations</span></h3>
-    <p class="muted" style="margin:6px 0 2px;font-size:13.5px">메모의 (설명) 문장 “게재 형태는 …이다”를 그대로 세었습니다. 같은 뜻을 늘 같은 말로 적어 두었기 때문에 쿼리가 문장을 셀 수 있습니다.</p>
-    <p class="en" style="margin:0 0 10px;font-size:13px">Counted from the (description) sentence in each note. Because the same thing is always phrased the same way, a query can count the sentences.</p>
+    <h3>Publication form, all 271 translations <span class="ko">· 전체 271종의 게재 형태</span></h3>
+    <p class="muted" style="margin:6px 0 2px;font-size:13.5px">Counted from the (description) sentence in each note. Because the same thing is always phrased the same way, a query can count the sentences.</p>
+    <p class="ko muted" style="margin:6px 0 2px;font-size:13.5px" style="margin:0 0 10px;font-size:13px">메모의 (설명) 문장 “게재 형태는 …이다”를 그대로 세었습니다. 같은 뜻을 늘 같은 말로 적어 두었기 때문에 쿼리가 문장을 셀 수 있습니다.</p>
     <div class="scroll"><table id="forms"></table></div>
   </div>
-  <details class="query"><summary>이 결과를 낸 쿼리 · The SPARQL behind this result</summary><pre>__Q_COLONIAL__</pre><pre>__Q_FORMS__</pre></details>
+  <details class="query"><summary>The SPARQL behind this result · 이 결과를 낸 쿼리</summary><pre>__Q_COLONIAL__</pre><pre>__Q_FORMS__</pre></details>
 </section>
 
 <section id="route">
   <div class="qhead">
-    <div class="qnum">질문 2 · Question 2 · Route</div>
-    <h2>무엇을 거쳐 옮겼나<span class="en block" style="font-size:.62em">Through which languages?</span></h2>
-    <p>저본이 밝혀진 네 종은 모두 중역입니다. 같은 1923년에 일본어와 중국어 두 경로가 함께 있었습니다. 김영진 역은 경유 정보가 없어서 ‘직접’이 아니라 ‘미기재’로 남겨 두었습니다.</p>
-    <p class="en">All four translations with an identified source are relay translations; in 1923 a Japanese and a Chinese route existed side by side. Kim Yeong-jin's has no route information, so it stays 'not stated', not 'direct'.</p>
+    <div class="qnum">Question 2 · Route · 질문 2</div>
+    <h2>Through which languages?<span class="ko block" style="font-size:.62em">무엇을 거쳐 옮겼나</span></h2>
+    <p>All four translations with an identified source are relay translations; in 1923 a Japanese and a Chinese route existed side by side. Kim Yeong-jin's has no route information, so it stays 'not stated', not 'direct'.</p>
+    <p class="ko">저본이 밝혀진 네 종은 모두 중역입니다. 같은 1923년에 일본어와 중국어 두 경로가 함께 있었습니다. 김영진 역은 경유 정보가 없어서 ‘직접’이 아니라 ‘미기재’로 남겨 두었습니다.</p>
   </div>
   <div class="panel">
     <div class="scroll" id="routes"></div>
     <div class="legend" style="margin-top:10px">
-      <span><i></i>저본 확인 · confirmed</span><span><i class="dash"></i>저본 추정 · inferred</span><span><i class="dot"></i>경유 미기재 · not stated</span>
+      <span><i></i>confirmed · 저본 확인</span><span><i class="dash"></i>inferred · 저본 추정</span><span><i class="dot"></i>not stated · 경유 미기재</span>
     </div>
   </div>
-  <details class="query"><summary>이 결과를 낸 쿼리 · The SPARQL behind this result</summary><pre>__Q_ROUTES__</pre></details>
+  <details class="query"><summary>The SPARQL behind this result · 이 결과를 낸 쿼리</summary><pre>__Q_ROUTES__</pre></details>
 </section>
 
 <section id="judge">
   <div class="qhead">
-    <div class="qnum">질문 3 · Question 3 · Evaluation</div>
-    <h2>후대 연구자들은 어떻게 평가하나<span class="en block" style="font-size:.62em">How do later scholars judge them?</span></h2>
-    <p>칸 하나가 번역 하나와 분류표 차원 하나가 만나는 자리입니다. 평가 항목에는 극성(+ / − / 0)이, 관찰 항목에는 값이 표시됩니다. 칸이나 머리글을 누르면 진술과 근거 문단이 아래에 나옵니다.</p>
-    <p class="en">Each cell is one translation meeting one dimension of the scheme. Evaluative dimensions show polarity (+ / − / 0), observational ones show the value. Click a cell or a heading to see the statements and their source paragraphs.</p>
+    <div class="qnum">Question 3 · Evaluation · 질문 3</div>
+    <h2>How do later scholars judge them?<span class="ko block" style="font-size:.62em">후대 연구자들은 어떻게 평가하나</span></h2>
+    <p>Each cell is one translation meeting one dimension of the scheme. Evaluative dimensions show polarity (+ / − / 0), observational ones show the value. Click a cell or a heading to see the statements and their source paragraphs.</p>
+    <p class="ko">칸 하나가 번역 하나와 분류표 차원 하나가 만나는 자리입니다. 평가 항목에는 극성(+ / − / 0)이, 관찰 항목에는 값이 표시됩니다. 칸이나 머리글을 누르면 진술과 근거 문단이 아래에 나옵니다.</p>
   </div>
   <div class="panel scroll"><table class="matrix" id="matrix"></table></div>
   <ul class="findings" id="findings"></ul>
   <div class="panel detail" id="detail" aria-live="polite"></div>
-  <details class="query"><summary>이 결과를 낸 쿼리 · The SPARQL behind this result</summary><pre>__Q_STATEMENTS__</pre></details>
+  <details class="query"><summary>The SPARQL behind this result · 이 결과를 낸 쿼리</summary><pre>__Q_STATEMENTS__</pre></details>
 </section>
 
 <section id="ai">
   <div class="qhead">
-    <div class="qnum">질문 4 · Question 4 · Reading with AI</div>
-    <h2>AI에게 넘기는 맥락<span class="en block" style="font-size:.62em">The context an AI receives</span></h2>
-    <p>위 쿼리 결과를 그대로 이어 붙인 텍스트입니다. 꼬리표 (설명)·(해석)·(편찬)·(근거)와 문단 번호가 함께 있어서, 언어 모델이 누가 무엇을 말했는지 구별하고 근거를 밝히며 답할 수 있습니다.</p>
-    <p class="en">The query results above, joined as text. With the tags (description), (interpretation), (compilation), (evidence) and the paragraph numbers, a language model can tell who said what and cite the evidence.</p>
+    <div class="qnum">Question 4 · Asking in plain words · 질문 4</div>
+    <h2>A plain question, answered by an AI that queries the RDF<span class="ko block" style="font-size:.62em">평범한 말로 묻고, AI가 RDF로 답한다</span></h2>
+    <p>A person asks in plain words. The AI receives the RDF data, writes a SPARQL query itself, runs it on the data, and answers in plain words from the result alone. The four steps below record one real try on 19 October 2026. The table in step 3 is the same query, run again when this page was built.</p>
+    <p class="ko">사람이 평범한 말로 묻습니다. AI는 RDF 데이터를 받아 SPARQL 쿼리를 직접 쓰고, 데이터에 돌린 뒤, 나온 결과만으로 평범한 말의 답을 씁니다. 아래 네 단계는 2026년 10월 19일에 실제로 한 번 해 본 기록입니다. 3단계의 표는 이 페이지를 만들 때 같은 쿼리를 다시 돌린 결과입니다.</p>
   </div>
-  <div class="row-actions">
-    <div class="tabs" role="tablist" id="ai-tabs"></div>
-    <div class="lang" role="group" aria-label="language">
-      <button type="button" class="tab" id="lang-ko" aria-selected="true">한국어</button>
-      <button type="button" class="tab" id="lang-en" aria-selected="false">English</button>
-    </div>
+  <div class="lang" role="group" aria-label="language">
+    <button type="button" class="tab" id="lang-en" aria-selected="true">English</button>
+    <button type="button" class="tab" id="lang-ko" aria-selected="false">한국어</button>
   </div>
-  <div class="panel" style="display:grid;gap:12px">
-    <div class="row-actions">
-      <button id="copy" type="button">맥락 복사 · Copy context</button>
+  <ol class="steps">
+    <li class="panel step">
+      <div class="eyebrow">1 · A person asks · 사람이 묻는다</div>
+      <p class="ask" id="ask"></p>
+    </li>
+    <li class="panel step">
+      <div class="eyebrow">2 · The AI receives the RDF · AI가 RDF를 받는다</div>
+      <p>What it receives: the data and the schema, __N_TRIPLES__ triples. For example, the record card (F28) of Kim Yeong-bo's 1923 translation is in the data like this, one triple per line.</p>
+      <p class="ko">받은 것: <code>ktrans-data.ttl</code>과 <code>ktrans-schema.ttl</code>, 트리플 __N_TRIPLES__개. 예를 들어 김영보 1923년 번역의 기록 카드(F28)는 데이터 안에 이렇게 있습니다. 한 줄에 트리플 하나입니다.</p>
+      <div class="packet"><pre id="card"></pre></div>
+    </li>
+    <li class="panel step">
+      <div class="eyebrow">3 · The AI writes and runs a query · AI가 쿼리를 쓰고 돌린다</div>
+      <details class="query" open><summary>The SPARQL the AI wrote · AI가 쓴 SPARQL</summary><pre>__Q_ASK__</pre></details>
+      <p><b id="ask-n"></b> rows · 줄</p>
+      <div class="scroll"><table id="ask-rows"></table></div>
+    </li>
+    <li class="panel step">
+      <div class="eyebrow">4 · The AI answers in plain words · AI가 평범한 말로 답한다</div>
+      <blockquote class="answer" id="answer"></blockquote>
+      <p class="muted" style="font-size:13px" id="answer-meta"></p>
+    </li>
+  </ol>
+  <div class="note-box">
+    <p><b>Honest limit.</b> One question, one try. The answer reads only the rows the query returned. Twelve later relay translations have no source on record, so they are not in it. A direction, not yet a tested tool.</p>
+    <p class="ko"><b>솔직한 한계.</b> 질문 하나에 한 번 해 본 것입니다. 답은 쿼리가 돌려준 네 줄만 읽습니다. 이후의 중역 12종은 저본을 적은 기록 카드가 없어서 답에 나오지 않습니다. 검증된 도구가 아니라 방향입니다.</p>
+  </div>
+  <details class="query">
+    <summary>Another way: giving the AI the results as text · 다른 방법: 쿼리 결과를 텍스트로 넘길 때</summary>
+    <p style="margin:10px 0 6px;font-size:14px">The query results above, joined as text with their tags and paragraph numbers. The model's answer on the slides was written from this text.</p>
+    <p style="margin:10px 0 6px;font-size:14px" class="ko" style="margin:0 0 10px;font-size:13px">위 쿼리 결과들을 꼬리표 (설명)·(해석)·(편찬)·(근거)와 문단 번호와 함께 이어 붙인 텍스트입니다. 슬라이드의 '모델의 답'은 이 텍스트를 받은 모델의 답입니다.</p>
+    <div class="row-actions" style="margin-bottom:10px">
+      <div class="tabs" role="tablist" id="ai-tabs"></div>
+      <button id="copy" type="button">Copy context · 맥락 복사</button>
       <span class="muted" id="copy-msg" style="font-size:13px"></span>
     </div>
     <div class="packet"><pre id="packet"></pre></div>
-    <div>
-      <h3>함께 넣을 질문 예시 <span class="en">· Example question</span></h3>
-      <p style="margin-top:6px" id="ask"></p>
-    </div>
-  </div>
+  </details>
 </section>
 
 <footer>
   <div>데이터 출처 · Source: <a href="http://www.uedeko.or.kr/wiki2/index.php?title=%EC%A0%8A%EC%9D%80_%EB%B2%A0%EB%A5%B4%ED%84%B0%EC%9D%98_%EA%B3%A0%EB%87%8C_(Die_Leiden_des_jungen_Werthers)">UeDeKo 『젊은 베르터의 고뇌』</a> — 서울대학교 독일어문화권연구소·(재)한독문학번역연구소 · Institute of German Studies and Korean-German Literary Translation Institute, Seoul National University. 번역비평 필자 · critical essay by 조향 (Jo Hyang).</div>
-  <div>모델 · Model: LRMoo v1.1.1 · CIDOC CRM v7.1.3 · ktrans v3.1. 파일 · Files: <a href="../ontology/ktrans-schema.ttl">ktrans-schema.ttl</a> · <a href="../data/ktrans-data.ttl">ktrans-data.ttl</a> · <a href="../queries/ktrans_demo.ipynb">ktrans_demo.ipynb</a></div>
+  <div>모델 · Model: LRMoo v1.1.1 · CIDOC CRM v7.1.3 · ktrans v3.1. 파일 · Files: <a href="../ontology/ktrans-schema.ttl">ktrans-schema.ttl</a> · <a href="../data/ktrans-data.ttl">ktrans-data.ttl</a> · <a href="../queries/ktrans_demo.ipynb">ktrans_demo.ipynb</a> · <a href="../slides/From_Design_to_Data_Trier_2026.pdf">slides (PDF)</a></div>
   <div>이 페이지는 scripts/build_demo.py가 TTL에 쿼리를 던져 __DATE__에 만들었습니다. · Generated from the TTL by scripts/build_demo.py on __DATE__. 영어 요지와 메모는 편찬자가 한국어에서 옮긴 것입니다. · English summaries and notes were translated from the Korean by the compiler. — 정송이 Jung Song-yi · 한국학중앙연구원 디지털인문학연구소 · Academy of Korean Studies</div>
 </footer>
 </div>
@@ -223,13 +257,13 @@ const dimEn = d => D.dimEn[d] || "";
 
 /* ---------- 질문 1 ---------- */
 $("#tr-table").innerHTML = `<thead><tr><th>연도<br>Year</th><th>제목<br>Title</th><th>역자<br>Translator</th><th>게재 형태<br>Form</th><th>게재처 · 시기<br>Venue · date</th><th>Leiden 역어<br>Leiden as</th><th class="num">진술<br>Statements</th></tr></thead><tbody>` +
-  T.map(t => `<tr><td class="num">${t.year}</td><td class="title-k">${esc(t.title)}</td><td>${esc(t.translator)}<span class="en block">${esc(t.translatorEn)}</span></td>
-  <td><span class="chip ${formClass(t.form)}">${esc(t.form)}</span><span class="en block">${esc(FORM_EN[t.form])}</span></td>
+  T.map(t => `<tr><td class="num">${t.year}</td><td class="title-k">${esc(t.title)}</td><td>${esc(t.translatorEn)}<span class="ko block">${esc(t.translator)}</span></td>
+  <td><span class="chip ${formClass(t.form)}">${esc(FORM_EN[t.form])}</span><span class="ko block">${esc(t.form)}</span></td>
   <td>${t.venue ? "『"+esc(t.venue)+"』 " : ""}<span class="muted">${esc(t.when)}</span>${t.venueEn ? `<span class="en block">${esc(t.venueEn.replace(/ \(.*\)/,""))}</span>` : ""}</td>
   <td class="title-k">${esc(t.leiden)}</td><td class="num">${t.statements.length}</td></tr>`).join("") + `</tbody>`;
 
 $("#forms").innerHTML = `<thead><tr><th>게재 형태 · Form</th><th class="num">번역 수<br>Translations</th><th class="num">처음<br>First</th><th class="num">마지막<br>Last</th></tr></thead><tbody>` +
-  D.forms.map(f => `<tr><td><span class="chip ${formClass(f.form)}">${esc(f.form)}</span> <span class="en">${esc(f.formEn)}</span></td><td class="num">${f.n}</td><td class="num">${f.from}</td><td class="num">${f.to}</td></tr>`).join("") + `</tbody>`;
+  D.forms.map(f => `<tr><td><span class="chip ${formClass(f.form)}">${esc(f.formEn)}</span> <span class="ko">${esc(f.form)}</span></td><td class="num">${f.n}</td><td class="num">${f.from}</td><td class="num">${f.to}</td></tr>`).join("") + `</tbody>`;
 
 (function timeline(){
   const W = 900, rowH = 50, top = 34, H = top + rowH * T.length + 10;
@@ -245,10 +279,10 @@ $("#forms").innerHTML = `<thead><tr><th>게재 형태 · Form</th><th class="num
     let a = t.year, b = t.year + 0.5;
     if (t.when) { const [p, q] = t.when.split("~"); a = frac(p); b = q ? frac(q) : a; }
     const color = t.form.includes("연재") ? "var(--plum)" : "var(--muted)";
-    s += `<text x="8" y="${cy-2}" class="ttl">${esc(shortT(t))}</text><text x="8" y="${cy+13}" class="sm">${esc(shortEn(t))}</text>`;
+    s += `<text x="8" y="${cy-2}" class="ttl">${esc(shortEn(t))}</text><text x="8" y="${cy+13}" class="sm">${esc(shortT(t))}</text>`;
     if (b - a > 0.02) s += `<rect x="${X(a)}" y="${cy-6}" width="${Math.max(X(b)-X(a),6)}" height="12" rx="3" fill="${color}" opacity=".85"/>`;
     else s += `<circle cx="${X(a)}" cy="${cy}" r="6" fill="${color}"/>`;
-    const lbl = `${esc(t.form)} · ${esc(FORM_EN[t.form])}${t.venue ? " · 『"+esc(t.venue)+"』" : ""}`;
+    const lbl = `${esc(FORM_EN[t.form])} · ${esc(t.form)}${t.venue ? " · 『"+esc(t.venue)+"』" : ""}`;
     const end = X(Math.max(a,b));
     s += end > R - 230 ? `<text class="sm" x="${X(Math.min(a,b)) - 12}" y="${cy+4}" text-anchor="end">${lbl}</text>`
                        : `<text class="sm" x="${end + 12}" y="${cy+4}">${lbl}</text>`;
@@ -267,22 +301,22 @@ $("#forms").innerHTML = `<thead><tr><th>게재 형태 · Form</th><th class="num
   };
   const midY = H / 2;
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:720px" role="img" aria-label="Routes of the colonial-era translations">`;
-  s += box(10, midY, 160, ["독일어 원문", "German original", "Goethe 1774"], true);
+  s += box(10, midY, 160, ["German original", "독일어 원문", "Goethe 1774"], true);
   T.forEach((t, i) => {
     const y = top + rowH * i + rowH / 2;
     const dash = t.cert === "추정" ? `stroke-dasharray="6 5"` : "";
     if (t.cert) {
-      let mid = [t.source.split("(")[0].trim(), t.sourceEn.split("(")[0].trim(), (t.source.match(/\((.*?)\)/)||[])[1] || ""];
+      let mid = [t.sourceEn.split("(")[0].replace(/ translation.*$/, "").replace(/[\u3400-\u9fff]+/g, "").trim(), t.source.split("(")[0].trim(), (t.source.match(/\((.*?)\)/)||[])[1] || ""];
       if (!t.source && D.mid[t.id]) mid = D.mid[t.id];
       s += `<path d="M170 ${midY} C 245 ${midY}, 245 ${y}, 320 ${y}" fill="none" stroke="var(--ink)" stroke-width="1.4"/>`;
       s += box(320, y, 260, mid, false);
       s += `<path d="M580 ${y} L 680 ${y}" stroke="var(--plum)" stroke-width="2" ${dash} fill="none"/>`;
-      s += `<text class="sm" x="630" y="${y-8}" text-anchor="middle">${esc(t.cert)}</text><text class="sm" x="630" y="${y+16}" text-anchor="middle">${esc(t.certEn)}</text>`;
+      s += `<text class="sm" x="630" y="${y-8}" text-anchor="middle">${esc(t.certEn)}</text><text class="sm" x="630" y="${y+16}" text-anchor="middle">${esc(t.cert)}</text>`;
     } else {
       s += `<path d="M170 ${midY} C 300 ${midY}, 420 ${y}, 680 ${y}" fill="none" stroke="var(--zero)" stroke-width="1.6" stroke-dasharray="2 5"/>`;
-      s += `<text class="sm" x="465" y="${y-8}" text-anchor="middle">경유 미기재 · route not stated</text>`;
+      s += `<text class="sm" x="465" y="${y-8}" text-anchor="middle">route not stated · 경유 미기재</text>`;
     }
-    s += box(680, y, 230, [`${t.translator} ${t.year}`, t.translatorEn, t.title], true);
+    s += box(680, y, 230, [`${t.translatorEn} ${t.year}`, t.translator, t.title], true);
   });
   $("#routes").innerHTML = s + `</svg>`;
 })();
@@ -292,15 +326,15 @@ const OBS = new Set(D.observe);
 const polClass = p => p === "+" ? "p" : p === "-" ? "n" : "z";
 const polGlyph = p => p === "-" ? "−" : p;
 (function matrix(){
-  let h = `<thead><tr class="group-row"><th></th><th colspan="4" style="text-align:center">관찰 · observation</th><th colspan="6" style="text-align:center">평가 · evaluation</th><th></th></tr><tr><th></th>`;
-  D.dims.forEach((d, j) => h += `<th class="dim ${OBS.has(d) ? "obs" : ""}" tabindex="0" data-col="${j}">${esc(d)}<span class="en block" style="font-size:10.5px">${esc(dimEn(d))}</span></th>`);
-  h += `<th class="dim" tabindex="0" data-col="fact">사실<span class="en block" style="font-size:10.5px">facts</span></th></tr></thead><tbody>`;
+  let h = `<thead><tr class="group-row"><th></th><th colspan="4" style="text-align:center">observation · 관찰</th><th colspan="6" style="text-align:center">evaluation · 평가</th><th></th></tr><tr><th></th>`;
+  D.dims.forEach((d, j) => h += `<th class="dim ${OBS.has(d) ? "obs" : ""}" tabindex="0" data-col="${j}">${esc(dimEn(d))}<span class="ko block" style="font-size:10.5px">${esc(d)}</span></th>`);
+  h += `<th class="dim" tabindex="0" data-col="fact">facts<span class="ko block" style="font-size:10.5px">사실</span></th></tr></thead><tbody>`;
   T.forEach((t, i) => {
-    h += `<tr><th class="row" tabindex="0" data-row="${i}">${esc(shortT(t))}<span class="en block" style="font-weight:400">${esc(shortEn(t))}</span></th>`;
+    h += `<tr><th class="row" tabindex="0" data-row="${i}">${esc(shortEn(t))}<span class="ko block" style="font-weight:400">${esc(shortT(t))}</span></th>`;
     D.dims.forEach((d, j) => {
       const ss = t.statements.filter(s => s.dim === d);
       let c = "";
-      if (OBS.has(d)) c = [...new Map(ss.filter(s => s.val).map(s => [s.val, s])).values()].map(s => `<span class="obsv">${esc(s.val)}<br>${esc(s.valEn)}</span>`).join("");
+      if (OBS.has(d)) c = [...new Map(ss.filter(s => s.val).map(s => [s.val, s])).values()].map(s => `<span class="obsv">${esc(s.valEn)}<br><span class="ko">${esc(s.val)}</span></span>`).join("");
       else c = ss.map(s => `<span class="pol ${polClass(s.pol)}">${esc(polGlyph(s.pol))}</span>`).join("");
       h += `<td tabindex="${ss.length ? 0 : -1}" data-row="${i}" data-col="${j}">${c}</td>`;
     });
@@ -327,19 +361,19 @@ function pick(el){
 }
 
 function showDetail(what, whatEn, list, mark){
-  let h = `<h3>${esc(what)} <span class="muted" style="font:400 13px var(--body)">${list.length}건 · ${list.length} statements</span><span class="en block" style="font:400 13px var(--body)">${esc(whatEn)}</span></h3>`;
-  if (!list.length) h += `<p class="muted">이 자리에는 진술이 없습니다. · No statements here.</p>`;
+  let h = `<h3>${esc(whatEn)} <span class="muted" style="font:400 13px var(--body)">${list.length} statements · ${list.length}건</span><span class="ko block" style="font:400 13px var(--body)">${esc(what)}</span></h3>`;
+  if (!list.length) h += `<p class="muted">No statements here. · 이 자리에는 진술이 없습니다.</p>`;
   list.forEach(s => {
     const pol = s.pol ? `<span class="pol ${polClass(s.pol)}">${esc(polGlyph(s.pol))}</span>` : "";
     let sum = esc(s.summary);
     if (mark) sum = sum.replace(new RegExp(mark, "g"), m => `<mark>${m}</mark>`);
     const extra = s.noteEn.includes("(compilation)") ? `<div class="meta" style="color:var(--plum)">${esc(s.note.split("\n")[0])}<br>${esc(s.noteEn.split("\n")[0])}</div>` : "";
     h += `<div class="stmt">
-      <div class="meta"><span>${esc(shortT(s.t))}</span><span>${esc(s.critic)} · ${esc(s.criticEn)}</span><span>${esc(s.stype)} · ${esc(s.stypeEn)}${s.dim ? " — " + esc(s.dim) + " · " + esc(s.dimEn) : ""}${s.val ? " = " + esc(s.val) + " · " + esc(s.valEn) : ""}</span><span>${esc(s.para)}</span><span>kt:${esc(s.id)}</span></div>
-      <div class="sum">${pol} ${sum}</div>
-      <div class="sum-en">${esc(s.summaryEn)}</div>
+      <div class="meta"><span>${esc(shortEn(s.t))}</span><span>${esc(s.criticEn)} · ${esc(s.critic)}</span><span>${esc(s.stypeEn)}${s.dimEn ? " — " + esc(s.dimEn) : ""}${s.valEn ? " = " + esc(s.valEn) : ""}</span><span>${esc(s.para)}</span><span>kt:${esc(s.id)}</span></div>
+      <div class="sum">${pol} ${esc(s.summaryEn)}</div>
+      <div class="sum-en">${sum}</div>
       ${extra}
-      <details><summary>근거 문단 ${esc(s.para)} 원문 · Source paragraph (Korean original)</summary><p>${esc(D.paras[s.para])}</p></details>
+      <details><summary>Source paragraph ${esc(s.para)} (Korean original) · 근거 문단 원문</summary><p>${esc(D.paras[s.para])}</p></details>
     </div>`;
   });
   $("#detail").innerHTML = h;
@@ -359,7 +393,7 @@ function showDetail(what, whatEn, list, mark){
     [`중역 번역의 ‘충실도’ 진술 ${relayFid.length}건에는 비교 기준이 독일어 원문이라는 (편찬) 문장이 붙어 있습니다. 생략이 중간 저본에서 왔는지는 데이터로 알 수 없기 때문입니다. 정확성·오역 이력 평가는 중역에 한 건도 없습니다.`,
      `The ${relayFid.length} fidelity statements on relay translations carry a (compilation) sentence: the comparison is with the German original, and the data cannot tell whether an omission comes from the intermediate source. No accuracy or error-history judgement is made on a relay translation.`, "f-relay"],
   ];
-  $("#findings").innerHTML = items.map(([k, e, id]) => `<li>${k} <span class="en block">${e}</span> <button type="button" id="${id}">진술 보기 · Show</button></li>`).join("");
+  $("#findings").innerHTML = items.map(([k, e, id]) => `<li>${e} <span class="ko block">${k}</span> <button type="button" id="${id}">Show · 진술 보기</button></li>`).join("");
   $("#f-base").onclick = () => showDetail("김영보 역을 기준으로 한 평가", "Judgements measured against Kim Yeong-bo", base, "김영보");
   $("#f-sc").onclick = () => showDetail("사회비판 전달", "Transfer of social critique", sc);
   $("#f-relay").onclick = () => showDetail("중역의 충실도 진술", "Fidelity statements on relay translations", relayFid);
@@ -368,11 +402,11 @@ function showDetail(what, whatEn, list, mark){
 
 /* ---------- 질문 4 ---------- */
 (function ai(){
-  const ASK = {
-    ko: "1920~30년대 베르터 번역들은 어떤 매체에, 어떤 경로를 거쳐 실렸나요? 후대 연구자들은 각 번역의 문체를 어떻게 평가했나요? 판단마다 누가 말했는지와 문단 번호를 함께 적어 주세요. 데이터에 없는 내용은 없다고 답해 주세요.",
-    en: "In what media and through which routes did the Werther translations of the 1920s and 30s appear? How did later scholars judge their style? Name the speaker and the paragraph for every judgement, and say so when something is not in the data."
-  };
-  let lang = "ko", cur = 0;
+  const A = D.ask;
+  let lang = "en", cur = 0;
+  $("#card").textContent = A.card.join("\n");
+  $("#ask-n").textContent = A.rows.length;
+  const certW = {ko: {"cert-confirmed": "확인", "cert-inferred": "추정"}, en: {"cert-confirmed": "confirmed", "cert-inferred": "inferred"}};
   const opts = [{ko: "다섯 종 모두", en: "All five", get: l => T.map(t => l === "en" ? t.packetEn : t.packet).join("\n\n")},
                 ...T.map(t => ({ko: shortT(t), en: shortEn(t), get: l => l === "en" ? t.packetEn : t.packet}))];
   const tabs = $("#ai-tabs");
@@ -382,18 +416,23 @@ function showDetail(what, whatEn, list, mark){
     b.onclick = () => { cur = i; draw(); }; tabs.append(b);
   });
   function draw(){
-    tabs.querySelectorAll(".tab").forEach((b, k) => { b.setAttribute("aria-selected", k === cur); b.textContent = opts[k][lang]; });
     $("#lang-ko").setAttribute("aria-selected", lang === "ko"); $("#lang-en").setAttribute("aria-selected", lang === "en");
+    $("#ask").textContent = A.question[lang];
+    const H = lang === "en" ? ["Translation", "Year", "Through", "How sure", "Note (who says so)"] : ["번역", "연도", "거친 판본", "확실성", "메모 (누가 말했나)"];
+    $("#ask-rows").innerHTML = `<thead><tr>${H.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>` +
+      A.rows.map(r => `<tr><td>${esc(r.translator)}<span class="ko block"><span class="title-k">${esc(r.title)}</span> · ${esc(r.id)}</span></td><td class="num">${esc(r.year)}</td><td>${r.source ? esc(r.source) : `<span class="muted">${lang === "en" ? "edition not identified" : "판본 미상"}</span>`}</td><td><span class="chip cert">${certW[lang][r.cert] || esc(r.cert)}</span></td><td style="font-size:13px">${esc(r.note)}</td></tr>`).join("") + "</tbody>";
+    $("#answer").textContent = A.answer[lang];
+    $("#answer-meta").textContent = A.meta[lang];
+    tabs.querySelectorAll(".tab").forEach((b, k) => { b.setAttribute("aria-selected", k === cur); b.textContent = opts[k][lang]; });
     $("#packet").textContent = opts[cur].get(lang);
-    $("#ask").textContent = ASK[lang];
     $("#copy-msg").textContent = "";
   }
   $("#lang-ko").onclick = () => { lang = "ko"; draw(); };
   $("#lang-en").onclick = () => { lang = "en"; draw(); };
   draw();
   $("#copy").onclick = async () => {
-    const text = $("#packet").textContent + "\n\n" + (lang === "en" ? "Question: " : "질문: ") + $("#ask").textContent;
-    try { await navigator.clipboard.writeText(text); $("#copy-msg").textContent = lang === "en" ? "Context and question copied." : "맥락과 질문을 복사했습니다."; }
+    const text = $("#packet").textContent;
+    try { await navigator.clipboard.writeText(text); $("#copy-msg").textContent = lang === "en" ? "Context copied." : "맥락을 복사했습니다."; }
     catch (e) {
       const r = document.createRange(); r.selectNodeContents($("#packet"));
       const s = getSelection(); s.removeAllRanges(); s.addRange(r);
